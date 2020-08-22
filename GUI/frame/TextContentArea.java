@@ -8,32 +8,28 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.border.LineBorder;
 
 import common.DTAPanel;
+import file.Language;
 import file.Localization;
-import file.Localization.Language;
 
 @SuppressWarnings("serial")
 public class TextContentArea extends DTAPanel {
 	// Attributes
-	private int default_index = 0;
 	private Localization localization = null;
-	private int selectedContent = 0;
+	private int selectedIndex = 0;
 
 	// Components
 	private JComboBox<String> cbLangs = null;
 	private JTextArea contentArea = null;
 
-	public TextContentArea(int default_index) {
+	public TextContentArea() {
 		// Set Attributes
-		this.default_index = default_index;
-
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 200, 20));
 
 		// Add Components
 		this.cbLangs = new JComboBox<>(new Vector<>());
-		this.cbLangs.addActionListener(e -> setTextContent(selectedContent));
+		this.cbLangs.addActionListener(e -> valueChanged());
 		this.add(cbLangs);
 
 		this.contentArea = new JTextArea(8, 200);
@@ -48,31 +44,40 @@ public class TextContentArea extends DTAPanel {
 		this.localization = localization;
 
 		// Set Data For ComboBox
-		Vector<String> langs = new Vector<>();
+		Vector<String> cbData = new Vector<>();
 
 		for (Language lang : localization.getLanguages()) {
-			langs.add(lang.getName());
+			cbData.add(lang.getLangName());
 		}
 
-		this.cbLangs.setModel(new DefaultComboBoxModel<>(langs));
-		this.cbLangs.setSelectedIndex(default_index);
+		this.cbLangs.setModel(new DefaultComboBoxModel<>(cbData));
+		this.cbLangs.setSelectedIndex(0);
 
-		this.setTextContent(selectedContent);
+		this.setTextContent(0);
 	}
 
 	public void setTextContent(int index) {
-		String content = localization.getEntry((String) cbLangs.getSelectedItem(), index);
+		// Save Old Text Content
+		String oldContent = this.contentArea.getText();
+		String selectedLangName = (String) cbLangs.getSelectedItem();
+
+		this.localization.setContent(selectedLangName, selectedIndex, oldContent);
+
+		// Set New Text Content
+		String newContent = localization.getContent(selectedLangName, index);
+
+		this.contentArea.setText(newContent);
+		
+		this.selectedIndex = index;
+	}
+
+	private void valueChanged() {
+		String selectedLangName = (String) cbLangs.getSelectedItem();
+
+		String content = localization.getContent(selectedLangName, selectedIndex);
 
 		this.contentArea.setText(content);
 	}
 
-	public void changeIndex(int index) {
-		String content = this.contentArea.getText();
-		
-		this.localization.setEntry((String) cbLangs.getSelectedItem(), selectedContent, content);
-		
-		this.selectedContent = index;
-		this.setTextContent(selectedContent);
-	}
 
 }

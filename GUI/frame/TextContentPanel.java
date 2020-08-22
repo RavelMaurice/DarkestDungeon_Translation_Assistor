@@ -20,13 +20,13 @@ public class TextContentPanel extends DTAPanel {
 		this.setLayout(new GridLayout(3, 1));
 
 		// Add Components
-		this.area_1 = new TextContentArea(0);
+		this.area_1 = new TextContentArea();
 		this.add(area_1);
 
-		this.area_2 = new TextContentArea(1);
+		this.area_2 = new TextContentArea();
 		this.add(area_2);
 
-		this.area_3 = new TextContentArea(2);
+		this.area_3 = new TextContentArea();
 		this.add(area_3);
 
 	}
@@ -39,10 +39,10 @@ public class TextContentPanel extends DTAPanel {
 		this.area_3.initialize(localization);
 	}
 	
-	public void changeIndex(int index) {
-		this.area_1.changeIndex(index);
-		this.area_2.changeIndex(index);
-		this.area_3.changeIndex(index);
+	public void setTextContent(int index) {
+		this.area_1.setTextContent(index);
+		this.area_2.setTextContent(index);
+		this.area_3.setTextContent(index);
 	}
 
 }

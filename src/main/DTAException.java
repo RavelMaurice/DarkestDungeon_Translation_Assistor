@@ -16,7 +16,7 @@ public class DTAException {
 		// Create Exception Report File
 		String fileName = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(new Date());
 
-		File file = new File(DTAPath.REPORT_PATH + fileName + REPORT_EXTENSION);
+		File file = new File(DTAPath.EXCEPTION_REPORT_PATH + fileName + REPORT_EXTENSION);
 
 		try {
 
@@ -41,6 +41,8 @@ public class DTAException {
 
 			System.exit(0);
 		}
+		
+		e.printStackTrace();
 
 	}
 

@@ -6,4 +6,7 @@
   <entry id="filemenu_exit">Exit</entry>
   <entry id="next">Next</entry>
   <entry id="previous">Previous</entry>
+  <entry id="integrity_verification_failed">Integrity verification failed</entry>
+  <entry id="integrity_verification_report_created">This file has defects!
+Integrity verification report has been created.</entry>
 </language>

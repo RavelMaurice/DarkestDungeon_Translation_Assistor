@@ -1,7 +1,10 @@
 package frame;
 
+import java.util.Vector;
+
 import common.DTAPanel;
 import common.ScrollableList;
+import file.Language;
 import file.Localization;
 import main.DTAText;
 
@@ -20,7 +23,9 @@ public class IDListPanel extends DTAPanel {
 	}
 
 	public void initialize(Localization localization) {
-		this.idList.setListData(localization.getEntryIDs());
+		Language lang = localization.getLanguages().get(0);
+		
+		this.idList.setListData(lang.getIDList());
 	}
 
 	public void setAssociations(TextContentPanel textContentPanel) {
@@ -38,7 +43,7 @@ public class IDListPanel extends DTAPanel {
 	}
 
 	private void valueChanged() {
-		this.textContentPanel.changeIndex(idList.getSelectedIndex());
+		this.textContentPanel.setTextContent(idList.getSelectedIndex());
 	}
 
 }
