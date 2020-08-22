@@ -12,13 +12,13 @@ public class Main {
 	public static void main(String[] args) {
 		// Set UI Option
 		try {
+			
 			// Color Option
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 			UIManager.put("List.selectionBackground", DTAColor.FOCUSING);
 			UIManager.put("List.selectionForeground", Color.BLACK);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			
+		} catch (Exception e) { DTAException.createReport(e); }
 
 		// Load Text
 		new DTAText().load();

@@ -4,4 +4,6 @@
   <entry id="filemenu_open">Open</entry>
   <entry id="filemenu_save">Save</entry>
   <entry id="filemenu_exit">Exit</entry>
+  <entry id="next">Next</entry>
+  <entry id="previous">Previous</entry>
 </language>

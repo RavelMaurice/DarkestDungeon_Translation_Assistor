@@ -1,12 +1,9 @@
 package frame;
 
 import java.awt.BorderLayout;
-import java.io.File;
 
 import common.DTAFrame;
-import common.ScrollableList;
 import file.Localization;
-import main.DTAText;
 
 @SuppressWarnings("serial")
 public class MainFrame extends DTAFrame {
@@ -16,6 +13,8 @@ public class MainFrame extends DTAFrame {
 	// Components
 	private MenuBar menuBar = null;
 	private IDListPanel idListPanel = null;
+	private TextContentPanel textContentPanel = null;
+	private ControlPanel controlPanel = null;
 
 	public MainFrame() {
 		// Set Attributes
@@ -27,19 +26,32 @@ public class MainFrame extends DTAFrame {
 		// Add Components
 		this.menuBar = new MenuBar();
 		this.setJMenuBar(menuBar);
-		
+
 		this.idListPanel = new IDListPanel();
 		this.add(idListPanel, BorderLayout.WEST);
-		
+
+		this.textContentPanel = new TextContentPanel();
+		this.add(textContentPanel, BorderLayout.CENTER);
+
+		this.controlPanel = new ControlPanel();
+		this.add(controlPanel, BorderLayout.SOUTH);
+
 		// Set Associations
 		this.menuBar.setAssociations(this);
+		this.idListPanel.setAssociations(textContentPanel);
+		this.controlPanel.setAssociations(idListPanel);
 
 	}
 
 	public void initialize(Localization loc) {
 		this.localization = loc;
-		
+
 		this.idListPanel.initialize(localization);
+		this.textContentPanel.initialize(localization);
+	}
+	
+	public Localization getLocalization() {
+		return localization;
 	}
 
 }

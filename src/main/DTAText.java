@@ -26,7 +26,7 @@ public class DTAText {
 		try {
 			// Read XML
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = (Document) builder.parse("lang/english.xml");
+			Document doc = (Document) builder.parse(DTAPath.LANG_ENGLISH);
 
 			// Get Root Element (language tag)
 			Element root = doc.getDocumentElement();
@@ -45,13 +45,11 @@ public class DTAText {
 			}
 
 		} catch (ParserConfigurationException | SAXException | IOException e) {
-			e.printStackTrace();
+			DTAException.createReport(e);
 		}
 
 	}
 
-	public static String get(String id) {
-		return textMap.get(id);
-	}
+	public static String get(String id) { return textMap.get(id); }
 
 }
