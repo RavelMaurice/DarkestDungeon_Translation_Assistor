@@ -2,12 +2,14 @@ package main;
 
 public class DTAPath {
 	
-	public static final String EXCEPTION_REPORT_PATH = "exception_report/";
+	// Save Path
+	public static final String ERROR_REPORT_PATH 			 	  = "Error/";
+	public static final String INTEGRITY_VERIFICATION_REPORT_PATH = "IVReport/";
 	
-	public static final String INTEGRITY_VERIFICATION_REPORT = "integrity_verification_report/";
-	
-	public static final String LANG_ENGLISH = "lang/english.xml";
+	// UI Text XML File Path
+	public static final String LANG_ENGLISH_XML 				  = "Lang/english.xml";
 
-	public static final String FRAME_ICON = "image/frame_icon.png";
+	// Image
+	public static final String FRAME_ICON_IMAGE 				  = "Image/frame_icon.png";
 
 }

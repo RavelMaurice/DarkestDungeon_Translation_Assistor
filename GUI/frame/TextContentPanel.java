@@ -7,42 +7,35 @@ import file.Localization;
 
 @SuppressWarnings("serial")
 public class TextContentPanel extends DTAPanel {
-	// Attributes
-	private Localization localization = null;
-
 	// Components
+	private TextContentArea area_0 = null;
 	private TextContentArea area_1 = null;
-	private TextContentArea area_2 = null;
-	private TextContentArea area_3 = null;
 
 	public TextContentPanel() {
 		// Set Attributes
-		this.setLayout(new GridLayout(3, 1));
+		setLayout(new GridLayout(2, 1));
 
 		// Add Components
-		this.area_1 = new TextContentArea();
-		this.add(area_1);
+		area_0 = new TextContentArea(0);
+		add(area_0);
 
-		this.area_2 = new TextContentArea();
-		this.add(area_2);
-
-		this.area_3 = new TextContentArea();
-		this.add(area_3);
-
+		area_1 = new TextContentArea(1);
+		add(area_1);
 	}
 
 	public void initialize(Localization localization) {
-		this.localization = localization;
-		
-		this.area_1.initialize(localization);
-		this.area_2.initialize(localization);
-		this.area_3.initialize(localization);
+		area_0.initialize(localization);
+		area_1.initialize(localization);
 	}
-	
+
 	public void setTextContent(int index) {
-		this.area_1.setTextContent(index);
-		this.area_2.setTextContent(index);
-		this.area_3.setTextContent(index);
+		area_0.setTextContent(index);
+		area_1.setTextContent(index);
+	}
+
+	public void saveTextContent() {
+		area_0.saveTextContent();
+		area_1.saveTextContent();
 	}
 
 }

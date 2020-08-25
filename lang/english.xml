@@ -6,7 +6,11 @@
   <entry id="filemenu_exit">Exit</entry>
   <entry id="next">Next</entry>
   <entry id="previous">Previous</entry>
-  <entry id="integrity_verification_failed">Integrity verification failed</entry>
-  <entry id="integrity_verification_report_created">This file has defects!
+  <entry id="integrity_verification_failed">This file has defects!
 Integrity verification report has been created.</entry>
+  <entry id="parsing_failed">The configuration of this file is incorrect.</entry>
+  <entry id="dialog_warning_title">Warning!</entry>
+  <entry id="dialog_error_title">Error!</entry>
+  <entry id="selected_same_language">This language already is selected</entry>
+  <entry id="mismatched_extension">Extension of this file is mismatched. Only 'xml' is allowed.</entry>
 </language>

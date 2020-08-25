@@ -11,10 +11,10 @@ public class DTAMenuItem extends JMenuItem{
 		super(name);
 
 		// Set Attributes
-		this.setActionCommand(methodName);
+		setActionCommand(methodName);
 
 		// Set Event Listener
-		this.addActionListener(l);
+		addActionListener(l);
 	}
 
 }

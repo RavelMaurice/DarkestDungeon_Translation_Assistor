@@ -10,7 +10,7 @@ public class DTAFrame extends JFrame {
 	
 	public DTAFrame() {
 		//Set Attributes
-		this.setIconImage(new ImageIcon(DTAPath.FRAME_ICON).getImage());
+		setIconImage(new ImageIcon(DTAPath.FRAME_ICON_IMAGE).getImage());
 	}
 
 }

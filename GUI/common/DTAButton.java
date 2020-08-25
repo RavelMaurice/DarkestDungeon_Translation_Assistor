@@ -10,8 +10,8 @@ public class DTAButton extends JButton {
 	public DTAButton(String name) {
 		super(name);
 		// Set Attributes
-		this.setPreferredSize(new Dimension(150, 100));
-
+		setEnabled(false);
+		setPreferredSize(new Dimension(90, 50));
 	}
 
 }

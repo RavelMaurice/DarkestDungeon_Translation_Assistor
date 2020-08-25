@@ -9,7 +9,7 @@ public class DTAPanel extends JPanel {
 
 	public DTAPanel() {
 		// Set Attributes
-		this.setBackground(DTAColor.BACKGROUND);
+		setBackground(DTAColor.BACKGROUND);
 	}
 
 }

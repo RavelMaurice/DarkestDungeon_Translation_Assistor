@@ -3,13 +3,12 @@ package frame;
 import java.awt.FlowLayout;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import common.DTAPanel;
+import common.DTAScrollPane;
 import file.Language;
 import file.Localization;
 
@@ -17,26 +16,27 @@ import file.Localization;
 public class TextContentArea extends DTAPanel {
 	// Attributes
 	private Localization localization = null;
-	private int selectedIndex = 0;
+	private int defaultSelectedIndex = 0;
+	private int selectedTextContentIndex = 0;
+	private boolean enable = true;
 
 	// Components
-	private JComboBox<String> cbLangs = null;
+	private JComboBox<String> cbLangNames = null;
 	private JTextArea contentArea = null;
 
-	public TextContentArea() {
+	public TextContentArea(int defaultSelectedIndex) {
 		// Set Attributes
-		this.setLayout(new FlowLayout(FlowLayout.CENTER, 200, 20));
+		setLayout(new FlowLayout(FlowLayout.CENTER, 200, 20));
+
+		this.defaultSelectedIndex = defaultSelectedIndex;
 
 		// Add Components
-		this.cbLangs = new JComboBox<>(new Vector<>());
-		this.cbLangs.addActionListener(e -> valueChanged());
-		this.add(cbLangs);
+		cbLangNames = new JComboBox<>(new Vector<>());
+		cbLangNames.addActionListener(e -> valueChanged());
+		add(cbLangNames);
 
-		this.contentArea = new JTextArea(8, 200);
-
-		JScrollPane pane = new JScrollPane(contentArea);
-		pane.setBorder(BorderFactory.createEmptyBorder());
-		this.add(pane);
+		contentArea = new JTextArea(10, 200);
+		add(new DTAScrollPane(contentArea));
 
 	}
 
@@ -49,35 +49,74 @@ public class TextContentArea extends DTAPanel {
 		for (Language lang : localization.getLanguages()) {
 			cbData.add(lang.getLangName());
 		}
+		
+		cbLangNames.setModel(new DefaultComboBoxModel<>(cbData));
+		
+		if(cbData.size() < defaultSelectedIndex + 1) {
+			cbLangNames.setEnabled(false);
+			contentArea.setEnabled(false);
+			enable = false;
+		}else {
+			cbLangNames.setEnabled(true);
+			contentArea.setEnabled(true);
+			enable = true;
+			
+			cbLangNames.setSelectedIndex(defaultSelectedIndex);
 
-		this.cbLangs.setModel(new DefaultComboBoxModel<>(cbData));
-		this.cbLangs.setSelectedIndex(0);
+			setTextContent(0);
+		}
+		
+	}
 
-		this.setTextContent(0);
+	
+
+	public String getSelectedLangName() {
+		return (String) cbLangNames.getSelectedItem();
+	}
+
+	public void saveTextContent() {
+		
+		if(!enable) {
+			return;
+		}
+		
+		if(localization == null) {
+			return;
+		}
+		
+		String textContent = contentArea.getText();
+		localization.setTextContent(getSelectedLangName(), selectedTextContentIndex, textContent);
 	}
 
 	public void setTextContent(int index) {
-		// Save Old Text Content
-		String oldContent = this.contentArea.getText();
-		String selectedLangName = (String) cbLangs.getSelectedItem();
-
-		this.localization.setContent(selectedLangName, selectedIndex, oldContent);
-
-		// Set New Text Content
-		String newContent = localization.getContent(selectedLangName, index);
-
-		this.contentArea.setText(newContent);
 		
-		this.selectedIndex = index;
+		if(!enable) {
+			return;
+		}
+		
+		if(localization == null) {
+			return;
+		}
+		
+		String textContent = localization.getTextContent(getSelectedLangName(), index);
+			
+		contentArea.setText(textContent);
+		
+		selectedTextContentIndex = index;
 	}
 
 	private void valueChanged() {
-		String selectedLangName = (String) cbLangs.getSelectedItem();
-
-		String content = localization.getContent(selectedLangName, selectedIndex);
-
-		this.contentArea.setText(content);
+		
+		if(!enable) {
+			return;
+		}
+		
+		if(localization == null) {
+			return;
+		}
+		
+		String textContent = localization.getTextContent(getSelectedLangName(), selectedTextContentIndex);
+		contentArea.setText(textContent);
 	}
-
 
 }

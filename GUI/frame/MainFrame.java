@@ -37,7 +37,7 @@ public class MainFrame extends DTAFrame {
 		this.add(controlPanel, BorderLayout.SOUTH);
 
 		// Set Associations
-		this.menuBar.setAssociations(this);
+		this.menuBar.setAssociations(this, textContentPanel);
 		this.idListPanel.setAssociations(textContentPanel);
 		this.controlPanel.setAssociations(idListPanel);
 
@@ -48,6 +48,7 @@ public class MainFrame extends DTAFrame {
 
 		this.idListPanel.initialize(localization);
 		this.textContentPanel.initialize(localization);
+		this.controlPanel.initialize(localization);
 	}
 	
 	public Localization getLocalization() {

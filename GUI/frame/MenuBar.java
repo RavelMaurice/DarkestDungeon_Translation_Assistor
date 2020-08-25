@@ -1,7 +1,11 @@
 package frame;
 
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -9,14 +13,18 @@ import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 
 import common.DTAMenuItem;
+import file.Language;
+import file.Language.Entry;
 import file.Localization;
 import main.DTAException;
 import main.DTAText;
+import util.Dialog;
 
 @SuppressWarnings("serial")
 public class MenuBar extends JMenuBar {
 	// Associatons
-	private MainFrame mainFrame = null;
+	private MainFrame 		 mainFrame 		  = null;
+	private TextContentPanel textContentPanel = null;
 
 	// Event
 	private ActionListener l = e -> invokeMethod(e.getActionCommand());
@@ -33,18 +41,14 @@ public class MenuBar extends JMenuBar {
 
 	}
 
-	public void setAssociations(MainFrame mainFrame) {
-		this.mainFrame = mainFrame;
+	public void setAssociations(MainFrame mainFrame, TextContentPanel textContentPanel) {
+		this.mainFrame 		  = mainFrame;
+		this.textContentPanel = textContentPanel;
 	}
 
 	public void invokeMethod(String methodName) {
-
-		try {
-			getClass().getMethod(methodName).invoke(this);
-		} catch (Exception e) {
-			DTAException.createReport(e);
-		}
-
+		try { getClass().getMethod(methodName).invoke(this); } 
+		catch (Exception e) { DTAException.createReport(e); }
 	}
 
 	public void open() {
@@ -58,16 +62,11 @@ public class MenuBar extends JMenuBar {
 			File file = fileChooser.getSelectedFile();
 
 			Localization localization = new Localization();
-			localization.load(file);
 
-			boolean result = localization.verifyIntegrity();
-
-			if (result) {
-				this.mainFrame.initialize(localization);
-			} else {
-				JOptionPane.showMessageDialog(mainFrame, DTAText.get("integrity_verification_report_created"),
-						DTAText.get("integrity_verification_failed"), JOptionPane.WARNING_MESSAGE);
-			}
+			String message = localization.load(file);
+			
+			if (message == null) { mainFrame.initialize(localization); } 
+			else { Dialog.showWarningMessageDialog(mainFrame, message); }
 
 		}
 
@@ -75,47 +74,52 @@ public class MenuBar extends JMenuBar {
 
 	public void save() {
 
-//		JFileChooser fileChooser = new JFileChooser();
-//
-//		int option = fileChooser.showSaveDialog(mainFrame);
-//
-//		if (option == JFileChooser.APPROVE_OPTION) {
-//
-//			Localization loc = mainFrame.getLocalization();
-//
-//			File file = fileChooser.getSelectedFile();
-//
-//			try {
-//				String header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n";
-//
-//				FileWriter writer = new FileWriter(file, true);
-//
-//				writer.write(header);
-//				writer.write("<root>\n");
-//
-//				for (Language lang : loc.getLanguages()) {
-//
-//					writer.write("<language id=\"" + lang.getName() + "\">\n");
-//
-//					for (int i = 0; i < loc.getEntryIDs().size(); i++) {
-//
-//						writer.write("<entry id=\"" + loc.getEntryIDs().get(i) + "\">" + "\n" + " <![CDATA["
-//								+ lang.getContent(i) + "]]>" + "\n" + "</entry>\n");
-//
-//					}
-//					System.out.println(lang.getName() + ":" + lang.getEntries().size());
-//					writer.write("</language>\n");
-//				}
-//
-//				writer.write("</root>");
-//				writer.flush();
-//				writer.close();
-//
-//				JOptionPane.showMessageDialog(mainFrame, "Saved!");
-//			} catch (IOException e) {
-//				DTAException.createReport(e);
-//			}
-//		}
+		this.textContentPanel.saveTextContent();
+
+		JFileChooser fileChooser = new JFileChooser();
+
+		int option = fileChooser.showSaveDialog(mainFrame);
+
+		if (option == JFileChooser.APPROVE_OPTION) {
+
+			File file = fileChooser.getSelectedFile();
+
+			Localization localization = mainFrame.getLocalization();
+
+			try {
+				String header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n";
+
+				FileOutputStream fos = new FileOutputStream(file, true);
+				OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+				BufferedWriter writer = new BufferedWriter(osw);
+
+				writer.write(header);
+				writer.write("<root>\n");
+
+				for (Language lang : localization.getLanguages()) {
+
+					writer.write("<language id=\"" + lang.getLangName() + "\">\n");
+
+					for (Entry entry : lang.getEntries()) {
+
+						writer.write("<entry id=\"" + entry.getID() + "\">" + "<![CDATA[" + entry.getTextContent() + "]]>"
+								+ "</entry>\n");
+
+					}
+
+					writer.write("</language>\n");
+				}
+
+				writer.write("</root>");
+				writer.flush();
+				writer.close();
+
+				JOptionPane.showMessageDialog(mainFrame, "Saved!");
+
+			} catch (IOException e) {
+				DTAException.createReport(e);
+			}
+		}
 
 	}
 

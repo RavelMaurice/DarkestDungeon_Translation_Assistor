@@ -13,33 +13,34 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class DTAText {
-
-	// Atrributes
+	// Data
 	private static HashMap<String, String> textMap = new HashMap<>();
 
-	// XML Constants
-	private static final String ENTRY = "entry";
-	private static final String ID = "id";
+	// XML Text Constants
+	private static final String STR_ENTRY = "entry";
+	private static final String STR_ID 	  = "id";
 
 	public static void load() {
 
 		try {
+			
 			// Read XML
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = (Document) builder.parse(DTAPath.LANG_ENGLISH);
+			Document doc = (Document) builder.parse(DTAPath.LANG_ENGLISH_XML);
 
 			// Get Root Element (language tag)
 			Element root = doc.getDocumentElement();
 
 			// Get NodeList (entry tag)
-			NodeList nodeList = root.getElementsByTagName(ENTRY);
+			NodeList entryList = root.getElementsByTagName(STR_ENTRY);
 
-			// Put Elements
-			for (int i = 0; i < nodeList.getLength(); i++) {
-				Element element = (Element) nodeList.item(i);
+			// Put Entry Elements
+			for (int i = 0; i < entryList.getLength(); i++) {
+				
+				Element entry = (Element) entryList.item(i);
 
-				String id = element.getAttribute(ID);
-				String text = element.getTextContent();
+				String id = entry.getAttribute(STR_ID);
+				String text = entry.getTextContent();
 
 				textMap.put(id, text);
 			}
@@ -50,6 +51,7 @@ public class DTAText {
 
 	}
 
+	// Getter
 	public static String get(String id) { return textMap.get(id); }
 
 }

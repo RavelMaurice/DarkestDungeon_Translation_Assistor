@@ -2,6 +2,7 @@ package frame;
 
 import common.DTAButton;
 import common.DTAPanel;
+import file.Localization;
 import main.DTAText;
 
 @SuppressWarnings("serial")
@@ -11,30 +12,40 @@ public class ControlPanel extends DTAPanel {
 
 	// Components
 	private DTAButton btnPrevious = null;
-	private DTAButton btnNext = null;
+	private DTAButton btnNext 	  = null;
 
 	public ControlPanel() {
-
 		// Add Components
-		this.btnPrevious = new DTAButton(DTAText.get("previous"));
-		this.btnPrevious.addActionListener(e -> previous());
-		this.add(btnPrevious);
+		btnPrevious = new DTAButton(DTAText.get("previous"));
+		btnPrevious.addActionListener(e -> previous());
+		add(btnPrevious);
 
-		this.btnNext = new DTAButton(DTAText.get("next"));
-		this.btnNext.addActionListener(e -> next());
-		this.add(btnNext);
+		btnNext = new DTAButton(DTAText.get("next"));
+		btnNext.addActionListener(e -> next());
+		add(btnNext);
 	}
 
+	// Event Method
 	private void previous() {
-		this.idListPanel.previousValue();
+		idListPanel.previous();
 	}
 
 	private void next() {
-		this.idListPanel.nextValue();
+		idListPanel.next();
 	}
 
 	public void setAssociations(IDListPanel idListPanel) {
 		this.idListPanel = idListPanel;
+	}
+
+	public void initialize(Localization localization) {
+
+		if(localization == null) {
+			return;
+		}
+		
+		btnNext.setEnabled(true);
+		btnPrevious.setEnabled(true);
 	}
 
 }

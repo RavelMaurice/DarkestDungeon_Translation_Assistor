@@ -14,10 +14,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import file.IntegrityIssue.IssueType;
-import main.DTAException;
+import main.DTAText;
+import util.FileUtil;
 
 public class Localization {
-	// Constants
+	// XML Text Constants
 	private final String STR_LANGUAGE = "language";
 	private final String STR_ID = "id";
 	private final String STR_ENTRY = "entry";
@@ -25,7 +26,12 @@ public class Localization {
 	// Attributes
 	private Vector<Language> languages = new Vector<>();
 
-	public void load(File file) {
+	public String load(File file) {
+		// Check File Extension
+		if (!FileUtil.getExtension(file).equals("xml")) {
+			return DTAText.get("mismatched_extension");
+		}
+
 		try {
 			// Read File
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -44,7 +50,7 @@ public class Localization {
 
 				String langName = langElement.getAttribute(STR_ID);
 
-				this.addLanguage(langName);
+				addLanguage(langName);
 
 				NodeList entryList = langElement.getElementsByTagName(STR_ENTRY);
 
@@ -62,94 +68,87 @@ public class Localization {
 			}
 
 		} catch (ParserConfigurationException | SAXException | IOException e) {
-			DTAException.createReport(e);
+			return DTAText.get("parse_exception");
 		}
 
-	}
-
-	public void addLanguage(String langName) {
-		this.languages.add(new Language(langName));
-	}
-
-	public Language getLanguage(String langName) {
-
-		for (Language lang : languages) {
-			if (lang.getLangName().equals(langName)) {
-				return lang;
-			}
-		}
-
-		return null;
+		return verifyIntegrity();
 
 	}
 
-	public Vector<Language> getLanguages() {
-		return languages;
-	}
-
-	public String getContent(String langName, int index) {
-		Language lang = getLanguage(langName);
-
-		return lang.getContent(index);
-	}
-
-	public void setContent(String langName, int index, String content) {
-		Language lang = getLanguage(langName);
-
-		lang.setContent(index, content);
-	}
-
-	public void addEntry(String langName, String id, String content) {
-		Language lang = getLanguage(langName);
-		lang.addEntry(id, content);
-	}
-	
-	public Language getStandardLanguage() {
-		return languages.get(0);
-	}
-
-	public boolean verifyIntegrity() {
+	public String verifyIntegrity() {
 		// Check Entry Missed & Finded
 		Language standard = getStandardLanguage();
-		
-		for(Language lang : getLanguages()) {
-			
+
+		for (Language lang : getLanguages()) {
+
 			Vector<String> finded = lang.getIDList();
-			
+
 			Vector<String> missed = new Vector<>();
-			
-			for(String id : standard.getIDList()) {
-				boolean result = finded.remove(id);
+
+			for (String id : standard.getIDList()) {
 				
-				if(!result) {
-					missed.add(id);
-				}
+				boolean result = finded.remove(id);
+
+				if (!result) { missed.add(id); }
+				
 			}
-			
-			if(finded.size() > 0 || missed.size() > 0) {
-			
+
+			if (finded.size() > 0 || missed.size() > 0) {
+
 				IntegrityIssue issue = new IntegrityIssue(IssueType.MISSED_OR_FINDED_ID);
 				issue.addItem(standard);
 				issue.addItem(lang);
 				issue.addItem(finded);
 				issue.addItem(missed);
-			
+
 				IntegrityReport.addIssue(issue);
-				
+
 			}
-			
+
 		}
 
 		// Create Integrity Verification Report
-		if(IntegrityReport.getIssueCount() == 0) {
-			return true;
-		}else {
+		if (IntegrityReport.getIssueCount() == 0) {
+			return null;
+		} else {
 			IntegrityReport.writeReport();
 			IntegrityReport.flush();
-			
-			return false;
+
+			return DTAText.get("integrity_verification_failed");
 		}
-		
+
+	}
+	
+	
+	
+
+	public void addLanguage(String langName) { languages.add(new Language(langName)); }
+
+	public Language getLanguage(String langName) {
+
+		for (Language lang : languages) {
+			if (lang.getLangName().equals(langName)) { return lang; }
+		}
+
+		return null;
+	}
+
+	public Vector<Language> getLanguages() { return languages; }
+
+	public String getTextContent(String langName, int index) { return getLanguage(langName).getTextContent(index); }
+
+	public void setTextContent(String langName, int index, String textContent) { getLanguage(langName).setTextContent(index, textContent); }
+
+	public void addEntry(String langName, String id, String content) { getLanguage(langName).addEntry(id, content); }
+
+	public Language getStandardLanguage() { return languages.get(0); }
+
+	public Vector<String> getLangNames() {
+		Vector<String> langNames = new Vector<>();
+
+		for (Language lang : getLanguages()) { langNames.add(lang.getLangName()); }
+
+		return langNames;
 	}
 
 }
