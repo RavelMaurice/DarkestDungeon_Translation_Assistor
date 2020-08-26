@@ -1,6 +1,9 @@
 package frame;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -33,6 +36,8 @@ public class TextContentArea extends DTAPanel {
 		// Add Components
 		cbLangNames = new JComboBox<>(new Vector<>());
 		cbLangNames.addActionListener(e -> valueChanged());
+		cbLangNames.addMouseListener(new CBMouseListener());
+		cbLangNames.setPreferredSize(new Dimension(100,30));
 		add(cbLangNames);
 
 		contentArea = new JTextArea(10, 200);
@@ -49,74 +54,81 @@ public class TextContentArea extends DTAPanel {
 		for (Language lang : localization.getLanguages()) {
 			cbData.add(lang.getLangName());
 		}
-		
+
 		cbLangNames.setModel(new DefaultComboBoxModel<>(cbData));
-		
-		if(cbData.size() < defaultSelectedIndex + 1) {
+
+		if (cbData.size() < defaultSelectedIndex + 1) {
 			cbLangNames.setEnabled(false);
 			contentArea.setEnabled(false);
 			enable = false;
-		}else {
+		} else {
 			cbLangNames.setEnabled(true);
 			contentArea.setEnabled(true);
 			enable = true;
-			
+
 			cbLangNames.setSelectedIndex(defaultSelectedIndex);
 
 			setTextContent(0);
 		}
-		
-	}
 
-	
+	}
 
 	public String getSelectedLangName() {
 		return (String) cbLangNames.getSelectedItem();
 	}
 
 	public void saveTextContent() {
-		
-		if(!enable) {
+
+		if (!enable) {
 			return;
 		}
-		
-		if(localization == null) {
+
+		if (localization == null) {
 			return;
 		}
-		
+
 		String textContent = contentArea.getText();
 		localization.setTextContent(getSelectedLangName(), selectedTextContentIndex, textContent);
 	}
 
 	public void setTextContent(int index) {
-		
-		if(!enable) {
+
+		if (!enable) {
 			return;
 		}
-		
-		if(localization == null) {
+
+		if (localization == null) {
 			return;
 		}
-		
+
 		String textContent = localization.getTextContent(getSelectedLangName(), index);
-			
+
 		contentArea.setText(textContent);
-		
+
 		selectedTextContentIndex = index;
 	}
 
 	private void valueChanged() {
-		
-		if(!enable) {
+
+		if (!enable) {
 			return;
 		}
-		
-		if(localization == null) {
+
+		if (localization == null) {
 			return;
 		}
-		
+
 		String textContent = localization.getTextContent(getSelectedLangName(), selectedTextContentIndex);
 		contentArea.setText(textContent);
+	}
+	
+	private class CBMouseListener extends MouseAdapter{
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			saveTextContent();
+		}
+		
 	}
 
 }

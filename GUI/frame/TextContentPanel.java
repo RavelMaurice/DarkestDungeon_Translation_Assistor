@@ -34,8 +34,8 @@ public class TextContentPanel extends DTAPanel {
 	}
 
 	public void saveTextContent() {
-		area_0.saveTextContent();
 		area_1.saveTextContent();
+		area_0.saveTextContent();
 	}
 
 }

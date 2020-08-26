@@ -30,7 +30,7 @@ public class ScrollableList<E> extends JScrollPane {
 		// Set Attributes
 		setBackground(Color.WHITE);
 		setViewportView(list);
-		setPreferredSize(new Dimension(250, 715));
+		setPreferredSize(new Dimension(250, 695));
 	}
 
 	public void setListData(Vector<E> listData) {

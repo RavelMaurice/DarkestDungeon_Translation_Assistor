@@ -13,4 +13,6 @@ Integrity verification report has been created.</entry>
   <entry id="dialog_error_title">Error!</entry>
   <entry id="selected_same_language">This language already is selected</entry>
   <entry id="mismatched_extension">Extension of this file is mismatched. Only 'xml' is allowed.</entry>
+  <entry id="total">Total</entry>
+  <entry id="selected">Selected</entry>
 </language>

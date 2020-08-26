@@ -37,7 +37,7 @@ public class MenuBar extends JMenuBar {
 		fileMenu.add(new DTAMenuItem(DTAText.get("filemenu_save"), "save", l));
 		fileMenu.add(new DTAMenuItem(DTAText.get("filemenu_exit"), "exit", l));
 
-		this.add(fileMenu);
+		add(fileMenu);
 
 	}
 
@@ -89,7 +89,7 @@ public class MenuBar extends JMenuBar {
 			try {
 				String header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n";
 
-				FileOutputStream fos = new FileOutputStream(file, true);
+				FileOutputStream fos = new FileOutputStream(file, false);
 				OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
 				BufferedWriter writer = new BufferedWriter(osw);
 
@@ -122,6 +122,7 @@ public class MenuBar extends JMenuBar {
 		}
 
 	}
+	
 
 	public void exit() {
 		System.exit(0);

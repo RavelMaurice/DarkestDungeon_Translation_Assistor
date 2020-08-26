@@ -1,8 +1,12 @@
 package frame;
 
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
+
 import common.DTAButton;
 import common.DTAPanel;
 import file.Localization;
+import main.DTAColor;
 import main.DTAText;
 
 @SuppressWarnings("serial")
@@ -15,6 +19,9 @@ public class ControlPanel extends DTAPanel {
 	private DTAButton btnNext 	  = null;
 
 	public ControlPanel() {
+		// Set Attributes
+		setBorder(new TitledBorder(new LineBorder(DTAColor.BORDER), "Control Pane"));
+		
 		// Add Components
 		btnPrevious = new DTAButton(DTAText.get("previous"));
 		btnPrevious.addActionListener(e -> previous());
